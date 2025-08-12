@@ -23,6 +23,7 @@ const { label = "Не задан", statistics } = defineProps({
 
 .statistics__name {
     font-weight: 700;
+    text-transform: uppercase;
 }
 
 .statistics__value {

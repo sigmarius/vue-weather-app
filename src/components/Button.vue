@@ -9,7 +9,9 @@
 
 <style scoped>
 .button {
+    height: 53px;
     padding: 14px;
+    width: 100%;
 
     display: flex;
     justify-content: center;
