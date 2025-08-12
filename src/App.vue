@@ -1,9 +1,6 @@
 <script setup>
-import { computed, ref } from 'vue';
-import Statistics from './components/Statistics.vue';
-import CitySelect from './components/CitySelect.vue';
-import Error from './components/Error.vue';
-import DayCard from './components/DayCard.vue';
+import { ref } from 'vue';
+import PanelRight from './components/PanelRight.vue';
 
 // https://www.weatherapi.com/my/
 // Weather API Key - 0453fef08fc540c38fd64830253107
@@ -16,37 +13,8 @@ let rawData = ref();
 // сюда будем записывать ошибки из API
 let error = ref();
 
-const errorMap = new Map([
-  [1006, "Указанный город не найден"]
-]);
-
-const errorDisplay = computed(() => {
-  return errorMap.get(error.value?.error?.code)
-});
-
 // индекс выбранного дня в списке
 let activeIndex = ref(0);
-
-let data = computed((prev) => {
-  if (!rawData.value) {
-      return [];
-  }
-
-  return [
-    {
-      label: 'Влажность',
-      statistics: rawData.value.current.humidity + ' %'
-    },
-    {
-      label: 'Облачность',
-      statistics: rawData.value.current.cloud + ' %'
-    },
-    {
-      label: 'Ветер',
-      statistics: rawData.value.current.wind_kph + ' км/ч'
-    }
-  ]
-});
 
 async function handleSelectCity(city) {
   const params = new URLSearchParams({
@@ -76,56 +44,41 @@ async function handleSelectCity(city) {
 
 <template>
   <main class="main">
-    <Error :error="errorDisplay" />
+    <div class="left">
 
-    <div v-if="data" class="cards">
-      <div class="cards__statistics">
-        <Statistics 
-          v-for="item in data" 
-          v-bind="item" 
-          :key="item.label" 
-        />
-      </div>
-
-      <div class="cards__list">
-        <DayCard 
-          v-for="(item, index) in rawData?.forecast?.forecastday" 
-          :key="item.date"
-          :weather-code="item?.day?.condition?.code" 
-          :date="new Date(item.date)" 
-          :temperature="item?.day?.avgtemp_c"
-          :is-active="activeIndex === index"   
-          @click="() => activeIndex = index"   
-        />
-      </div>
     </div>
 
-    <CitySelect @select-city="handleSelectCity" />
+    <div class="right">
+      <PanelRight 
+        :data="rawData" 
+        :active-index 
+        :error 
+        @select-index="(index) => activeIndex = index" 
+        @select-city="handleSelectCity"
+      />
+    </div>
   </main>
 </template>
 
 <style scoped>
 .main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left {
+  width: 500px;
+  height: 680px;
+  border-radius: 30px;
+  background-image: url('/public/left-bg.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.right {
   padding: 60px;
-  border-radius: 25px;
+  border-radius: 0 25px 25px 0;
   background: var(--color-bg-main);
-}
-
-.cards {
-  margin-bottom: 70px;
-  display: flex;
-  flex-direction: column;
-  gap: 80px;
-}
-
-.cards__statistics {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.cards__list {
-  display: flex;
-  gap: 1px;
 }
 </style>
