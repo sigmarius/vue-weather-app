@@ -12,8 +12,6 @@ const { data, activeIndex, error } = defineProps({
   error: Object
 });
 
-console.log('Panel Right data', data)
-
 const emit = defineEmits([
     'select-index',
     'select-city'
@@ -72,8 +70,7 @@ let statisticsData = computed((prev) => {
         </div>
     </div>
 
-    <CitySelect 
-        @select-city="(city) => emit('select-city', city)" />
+    <CitySelect />
 </template>
 
 <style scoped>

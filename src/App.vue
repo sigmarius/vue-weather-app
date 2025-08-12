@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, provide, ref, watch } from 'vue';
 import PanelRight from './components/PanelRight.vue';
 
 // https://www.weatherapi.com/my/
@@ -15,6 +15,20 @@ let error = ref();
 
 // индекс выбранного дня в списке
 let activeIndex = ref(0);
+
+let city = ref('Vladimir'); // отображается при загрузке приложения
+
+// из корневого компонента пробрасываем значение в любой вложенный компонент, минуя ненужную вложенность
+// работает также и для реактивных переменных
+provide('city', city)
+
+watch(city, () => {
+  handleSelectCity(city.value);
+});
+
+onMounted(() => {
+  handleSelectCity(city.value);
+});
 
 async function handleSelectCity(city) {
   const params = new URLSearchParams({
@@ -54,7 +68,6 @@ async function handleSelectCity(city) {
         :active-index 
         :error 
         @select-index="(index) => activeIndex = index" 
-        @select-city="handleSelectCity"
       />
     </div>
   </main>

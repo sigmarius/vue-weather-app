@@ -1,36 +1,28 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { inject, ref } from 'vue';
 import Button from './Button.vue';
 import IconLocation from './icons/IconLocation.vue';
 import Input from './Input.vue';
-
-const emit = defineEmits({
-    selectCity(payload) {
-        console.log('Validating payload', payload);
-        return payload;
-    }
-});
-
-let city = ref('Vladimir');
 
 // состояние определяет, находимся ли мы в режиме редактирования
 // по умолчанию - false, мы не редактируем город
 const isEdited = ref(false);
 
-onMounted(() => {
-    console.log('CitySelect component mounted');
-    emit('selectCity', city.value);
-});
-
 function selectCity() {
     isEdited.value = false;
 
-    emit('selectCity', city.value);
+    city.value = inputValue.value;
 }
 
 function edit() {
     isEdited.value = true;
 }
+
+// получаем город из корневого компонента
+const city = inject('city');
+
+// связываем с input, передавая туда начальное значение города
+const inputValue = ref(city.value);
 </script>
 
 <template>
@@ -39,7 +31,7 @@ function edit() {
             <Input 
                 v-focus 
                 placeholder="Введите город" 
-                v-model="city" 
+                v-model="inputValue" 
                 @keyup.enter="selectCity()" 
             />
             <Button @click="selectCity()">
