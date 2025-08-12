@@ -1,20 +1,37 @@
 <script setup>
+import { computed } from 'vue';
 import IconCloud from './icons/weather/IconCloud.vue';
 import IconRain from './icons/weather/IconRain.vue';
 import IconSun from './icons/weather/IconSun.vue';
 
-const { weatherCode, temperature, date } = defineProps({
+const { weatherCode, temperature, date, isActive } = defineProps({
   weatherCode: Number,
   temperature: Number,
-  date: Date
+  date: Date,
+  isActive: Boolean
+});
+
+const iconColor = computed(() => {
+    return isActive
+        ? 'var(--color-primary-inverted)'
+        : 'var(--color-primary)';
 });
 </script>
 
 <template>
-    <button class="card">
-        <IconSun v-if="weatherCode === 1000" />
-        <IconCloud v-if="weatherCode === 1189" />
-        <IconRain v-if="weatherCode === 1063" />
+    <button class="card" :class="{ active: isActive }">
+        <IconSun 
+            v-if="weatherCode <= 1003" 
+            :color="iconColor"
+        />
+        <IconCloud 
+            v-if="weatherCode >= 1006 && weatherCode < 1063" 
+            :color="iconColor"
+        />
+        <IconRain 
+            v-if="weatherCode >= 1063" 
+            :color="iconColor"
+        />
 
         <div class="card__date">
             {{ date.toLocaleDateString('ru-RU', { weekday: 'short' }) }}
@@ -51,7 +68,12 @@ const { weatherCode, temperature, date } = defineProps({
     transition: all 0.3s ease-in-out;
 }
 
-.card:hover {
+.active {
+    color: var(--color-primary-inverted);
+    background-color: var(--color-primary);
+}
+
+.card:not(.active):hover {
     background-color: var(--color-bg-card-hover);
 }
 

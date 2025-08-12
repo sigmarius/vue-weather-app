@@ -24,6 +24,9 @@ const errorDisplay = computed(() => {
   return errorMap.get(error.value?.error?.code)
 });
 
+// индекс выбранного дня в списке
+let activeIndex = ref(0);
+
 let data = computed((prev) => {
   if (!rawData.value) {
       return [];
@@ -86,11 +89,13 @@ async function handleSelectCity(city) {
 
       <div class="cards__list">
         <DayCard 
-          v-for="item in rawData?.forecast?.forecastday" 
+          v-for="(item, index) in rawData?.forecast?.forecastday" 
           :key="item.date"
           :weather-code="item?.day?.condition?.code" 
           :date="new Date(item.date)" 
-          :temperature="item?.day?.avgtemp_c"      
+          :temperature="item?.day?.avgtemp_c"
+          :is-active="activeIndex === index"   
+          @click="() => activeIndex = index"   
         />
       </div>
     </div>
