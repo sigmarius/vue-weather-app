@@ -5,6 +5,7 @@ import Statistics from './Statistics.vue';
 import CitySelect from './CitySelect.vue';
 import Error from './Error.vue';
 import DayCard from './DayCard.vue';
+import { errorMap } from '../constants';
 
 const { data, activeIndex, error } = defineProps({
   data: Object,
@@ -17,9 +18,6 @@ const emit = defineEmits([
     'select-city'
 ]);
 
-const errorMap = new Map([
-    [1006, "Указанный город не найден"]
-]);
 
 const errorDisplay = computed(() => {
     return errorMap.get(error?.error?.code)

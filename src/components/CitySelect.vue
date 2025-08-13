@@ -3,6 +3,7 @@ import { inject, ref } from 'vue';
 import Button from './Button.vue';
 import IconLocation from './icons/IconLocation.vue';
 import Input from './Input.vue';
+import { cityProvide } from '../constants';
 
 // состояние определяет, находимся ли мы в режиме редактирования
 // по умолчанию - false, мы не редактируем город
@@ -19,7 +20,8 @@ function edit() {
 }
 
 // получаем город из корневого компонента
-const city = inject('city');
+// используем символ из constants.js для уникальности
+const city = inject(cityProvide);
 
 // связываем с input, передавая туда начальное значение города
 const inputValue = ref(city.value);

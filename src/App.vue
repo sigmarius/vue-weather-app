@@ -1,12 +1,7 @@
 <script setup>
 import { onMounted, provide, ref, watch } from 'vue';
 import PanelRight from './components/PanelRight.vue';
-
-// https://www.weatherapi.com/my/
-// Weather API Key - 0453fef08fc540c38fd64830253107
-const API_ENDPOINT = 'https://api.weatherapi.com/v1';
-
-const API_KEY = '0453fef08fc540c38fd64830253107';
+import { API_ENDPOINT, API_KEY, cityProvide } from './constants';
 
 let rawData = ref();
 
@@ -20,7 +15,8 @@ let city = ref('Vladimir'); // отображается при загрузке 
 
 // из корневого компонента пробрасываем значение в любой вложенный компонент, минуя ненужную вложенность
 // работает также и для реактивных переменных
-provide('city', city)
+// используем символ из constants.js для уникальности
+provide(cityProvide, city)
 
 watch(city, () => {
   handleSelectCity(city.value);
@@ -84,7 +80,7 @@ async function handleSelectCity(city) {
   width: 500px;
   height: 680px;
   border-radius: 30px;
-  background-image: url('/public/left-bg.png');
+  background-image: url('/left-bg.png');
   background-repeat: no-repeat;
   background-size: cover;
 }
