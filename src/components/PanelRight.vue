@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 
 import Statistics from './Statistics.vue';
 import CitySelect from './CitySelect.vue';
@@ -31,15 +31,15 @@ let statisticsData = computed((prev) => {
     return [
         {
             label: 'Влажность',
-            statistics: data?.current?.humidity + ' %'
+            statistics: data?.forecast?.forecastday[activeIndex]?.day?.avghumidity + ' %'
         },
         {
-            label: 'Облачность',
-            statistics: data?.current?.cloud + ' %'
+            label: 'Вероятность дождя',
+            statistics: data?.forecast?.forecastday[activeIndex]?.day?.daily_chance_of_rain + ' %'
         },
         {
             label: 'Ветер',
-            statistics: data?.current?.wind_kph + ' км/ч'
+            statistics: data?.forecast?.forecastday[activeIndex]?.day?.maxwind_kph + ' км/ч'
         }
     ]
 });
