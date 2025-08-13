@@ -1,7 +1,8 @@
 <script setup>
 import { onMounted, provide, ref, watch } from 'vue';
-import PanelRight from './components/PanelRight.vue';
 import { API_ENDPOINT, API_KEY, cityProvide } from './constants';
+import PanelLeft from './components/PanelLeft.vue';
+import PanelRight from './components/PanelRight.vue';
 
 let rawData = ref();
 
@@ -55,7 +56,10 @@ async function handleSelectCity(city) {
 <template>
   <main class="main">
     <div class="left">
-
+      <PanelLeft
+        v-if="rawData"
+        :dayData="rawData?.forecast?.forecastday[activeIndex]"  
+      />
     </div>
 
     <div class="right">
