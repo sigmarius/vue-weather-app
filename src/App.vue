@@ -48,8 +48,6 @@ async function handleSelectCity(city) {
 
   error.value = null;
   rawData.value = await response.json();
-
-  console.log('Weather data for', city, ':', rawData.value);
 }
 </script>
 
